@@ -1,0 +1,30 @@
+name: Generate vbmeta disabled
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install avbtool
+        run: |
+          sudo apt update
+          sudo apt install -y python3 python3-pip
+          pip3 install avbtool
+
+      - name: Generate vbmeta disabled
+        run: |
+          avbtool make_vbmeta_image \
+            --flags 2 \
+            --output vbmeta_disabled.img
+
+      - name: Upload vbmeta
+        uses: actions/upload-artifact@v4
+        with:
+          name: vbmeta_disabled
+          path: vbmeta_disabled.img
